@@ -1,0 +1,14 @@
+bool checkOverlap(int radius, int xCenter, int yCenter, int x1, int y1, int x2, int y2) {
+        //min distance find krenge pehle means nearest coord
+        int near_x = max(x1, min(x2,xCenter));
+        int near_y = max(y1, min(y2,yCenter));
+
+        //radius se check renge kam ya equal hai ki nahi
+        //nothing but euclid distance formula
+        //(y-cy*y-cy + x-cx*x-cx)
+        int distx = near_x - xCenter;
+        int disty = near_y - yCenter;
+
+        if(distx*distx + disty*disty <= radius*radius) return true;
+        return false;
+}
