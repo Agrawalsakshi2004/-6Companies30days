@@ -1,0 +1,23 @@
+//0th index wale increasing order me aur 1th same hua toh dec order me
+    static bool comp(vector<int> &a, vector<int> &b){
+        if(a[0] == b[0])
+            return a[1]>b[1];
+        return a[0]<b[0];
+    }
+
+    int maxEnvelopes(vector<vector<int>>& envelopes) {
+        sort(envelopes.begin(), envelopes.end(), comp);
+        int i,j, n = envelopes.size();
+        vector<int> LIS;
+
+        for(int i =0; i<n; i++){
+            auto it = lower_bound(LIS.begin(), LIS.end(), envelopes[i][1]);
+            if(it == LIS.end()){       //agar greater value ni mila in lts
+                LIS.push_back(envelopes[i][1]);
+            }
+            else{ //agar mil gaya toh replace kr denge envelopes[i][1] se
+                *it = envelopes[i][1];
+            }
+        }
+        return LIS.size();
+  }
