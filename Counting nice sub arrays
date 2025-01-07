@@ -1,0 +1,18 @@
+int numberOfSubarrays(vector<int>& nums, int k) {
+        unordered_map<int, int> mp; //kitna oddcount kitni baar aya hai
+
+        int res =0;
+        int oddcount =0;
+        mp[oddcount] = 1;
+        for(int i =0; i<nums.size(); i++){
+
+            oddcount+= nums[i]%2; //even hoga 0 add hoga odd hoga toh 1
+
+            if(mp.count(oddcount-k)){ //check if present or not
+                res+= mp[oddcount-k];
+            }
+
+            mp[oddcount]++;
+        }
+        return res;
+    }
