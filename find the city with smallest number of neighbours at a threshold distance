@@ -1,0 +1,72 @@
+#define P pair<int, int>
+    void dijkstra (int n, unordered_map<int, vector<P> >& adj, vector<int> &res, int source){
+        set<P> st;
+        res[source] =0;
+        st.insert({0, source}); //{dist, node} //kitta dist h uss node se
+
+        while(!st.empty()){
+            //fetch top record
+            auto top = *(st.begin());
+            int nodedistance = top.first;
+            int topnode = top.second;
+
+            st.erase(st.begin()); //remove top
+
+            //traverse on neighbours
+            for(auto neighbour: adj[topnode]){
+                if(nodedistance+ neighbour.second < res[neighbour.first]){
+                    if(res[neighbour.first] != INT_MAX){
+                        st.erase({res[neighbour.first], neighbour.first});
+                    }
+                    //distance update
+                    res[neighbour.first] = nodedistance + neighbour.second;
+                    //push record in set
+                    st.insert({res[neighbour.first], neighbour.first});
+                }
+            }
+        }
+    }
+
+    int city(int n, vector<vector<int>>& SPM, int D){
+        int res = -1;
+        int minreachcount = INT_MAX;
+
+        for(int i =0; i<n; i++){
+            int count = 0;
+            for(int j =0; j<n; j++){
+                if(i != j && SPM[i][j] <= D){
+                    count++;
+                }
+            }
+            if(count<= minreachcount){
+                minreachcount = count;
+                res = i;
+            }
+        }
+        return res;
+
+    }
+
+    int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {
+        //isme saare nodes se saare nodes tak ka dist rhega
+        vector<vector<int>> SPM(n, vector<int>(n, INT_MAX));
+
+        for(int i =0; i<n; i++){
+            SPM[i][i] = 0;
+        }
+        unordered_map<int, vector<P>> adj;
+        for(auto edge: edges){
+            int v = edge[0];
+            int u = edge[1];
+            int wt = edge[2];
+
+            adj[v].push_back({u,wt});
+            adj[u].push_back({v,wt});
+        }
+
+        for(int i =0; i<n; i++){
+            dijkstra(n, adj, SPM[i], i);
+        }
+
+        return city(n, SPM, distanceThreshold);
+    }
